@@ -20,7 +20,9 @@ public class HellobootApplication {
     public static void main(String[] args) {
         ServletWebServerFactory serverFactory = new TomcatServletWebServerFactory();
         WebServer webServer = serverFactory.getWebServer(servletContext -> {
-            servletContext.addServlet("frontController", new HttpServlet() {
+			HelloController helloController = new HelloController();
+
+			servletContext.addServlet("frontController", new HttpServlet() {
                 @Override
                 protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 					// "Servlet Container"의 mapping 기능을 "Front Controller"가 담당
@@ -28,9 +30,11 @@ public class HellobootApplication {
 						// => @GetMapping("/hello")
 						String name = req.getParameter("name");
 
-						resp.setStatus(HttpStatus.OK.value());
+						String ret = helloController.hello(name);
+
+						resp.setStatus(HttpStatus.OK.value()); // 생략 가능
 						resp.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE);
-						resp.getWriter().println("Hello " + name);
+						resp.getWriter().println(ret);
 					}
 					else if (req.getRequestURI().equals("/user")) {
 						//
