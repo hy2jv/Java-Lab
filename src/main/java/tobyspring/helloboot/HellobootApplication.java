@@ -3,6 +3,7 @@ package tobyspring.helloboot;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServer;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -11,6 +12,15 @@ import org.springframework.web.servlet.DispatcherServlet;
 @Configuration
 @ComponentScan
 public class HellobootApplication {
+	@Bean
+	public ServletWebServerFactory servletWebServerFactory() {
+		return new TomcatServletWebServerFactory();
+	}
+
+	@Bean
+	public DispatcherServlet dispatcherServlet() {
+		return new DispatcherServlet();
+	}
 
     public static void main(String[] args) {
 		AnnotationConfigWebApplicationContext applicationContext = new AnnotationConfigWebApplicationContext() {
@@ -18,17 +28,18 @@ public class HellobootApplication {
 			protected void onRefresh() {
 				super.onRefresh();
 
-				ServletWebServerFactory serverFactory = new TomcatServletWebServerFactory();
-				WebServer webServer = serverFactory.getWebServer(servletContext -> {
+				ServletWebServerFactory serverFactory = this.getBean(ServletWebServerFactory.class);
+				DispatcherServlet dispatcherServlet = this.getBean(DispatcherServlet.class);
+				dispatcherServlet.setApplicationContext(this); // 생성자 주입, 생략하더라도 스프링 컨테이너에서 자동으로 주입해줌
 
-					servletContext.addServlet("dispatcherServlet",
-							new DispatcherServlet(this)
+				WebServer webServer = serverFactory.getWebServer(servletContext -> {
+					servletContext.addServlet("dispatcherServlet", dispatcherServlet
 					).addMapping("/*");
 				});
 				webServer.start();
 			}
 		};
-		applicationContext.register(HellobootApplication.class); // 여기서 출발해서 빈 오브젝트를 만들도록 등록
+		applicationContext.register(HellobootApplication.class);
 		applicationContext.refresh();
     }
 
