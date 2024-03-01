@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Objects;
 
-@RestController // "@Controller"와 "@Response Body"를 "meta annotation"으로 가지고 있음
+@RestController
 public class HelloController {
 
     private final HelloService helloService;
