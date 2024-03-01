@@ -9,6 +9,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -16,7 +17,7 @@ public class ConditionalTest {
     @Test
     void conditional() {
         // true
-        ApplicationContextRunner contextRunner =  new ApplicationContextRunner();
+        ApplicationContextRunner contextRunner = new ApplicationContextRunner();
         contextRunner.withUserConfiguration(Config1.class)
                 .run(context -> {
                     assertThat(context).hasSingleBean(MyBean.class);
@@ -46,11 +47,13 @@ public class ConditionalTest {
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
-    @Conditional(TrueCondition.class)
-    @interface TrueConditional {}
+    @Conditional(BooleanCondition.class)
+    @interface BooleanConditional {
+        boolean value();
+    }
 
     @Configuration
-    @TrueConditional
+    @BooleanConditional(true)
     static class Config1 {
         @Bean
         MyBean myBean() {
@@ -58,13 +61,9 @@ public class ConditionalTest {
         }
     }
 
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target(ElementType.TYPE)
-    @Conditional(FalseCondition.class)
-    @interface FalseConditional {}
 
     @Configuration
-    @FalseConditional
+    @BooleanConditional(false)
     static class Config2 {
         @Bean
         MyBean myBean() {
@@ -72,19 +71,15 @@ public class ConditionalTest {
         }
     }
 
-    static class MyBean { }
+    static class MyBean {
+    }
 
-    static class TrueCondition implements Condition {
+    static class BooleanCondition implements Condition {
         @Override
         public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
-            return true;
+            Map<String, Object> annotationAttributes = metadata.getAnnotationAttributes(BooleanConditional.class.getName());
+            return (Boolean) annotationAttributes.get("value");
         }
     }
 
-    static class FalseCondition implements Condition {
-        @Override
-        public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
-            return false;
-        }
-    }
 }
