@@ -7,4 +7,5 @@
 
 
 
-![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=hy2jv&show_icons=true&theme=ambient_gradient)
+<a href="https://github.com/hy2jv"><img align="center" style="height:180px" src="https://github-readme-stats.vercel.app/api?username=hy2jv&show_icons=true&include_all_commits=true&theme=nord&hide_border=true" alt="SOKURI's github stats" /></a>
+<a href="https://github.com/hy2jv"><img align="center" style="height:180px" src="https://github-readme-stats.vercel.app/api/top-langs/?username=hy2jv&layout=compact&theme=nord&hide_border=true" /></a> 
