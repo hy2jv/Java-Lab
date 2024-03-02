@@ -6,11 +6,12 @@ import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import tobyspring.config.ConditionalMyOnClass;
+import tobyspring.config.EnableMyConfigurationProperties;
 import tobyspring.config.MyAutoConfiguration;
 
 @MyAutoConfiguration
 @ConditionalMyOnClass("org.apache.catalina.startup.Tomcat")
-@Import(ServerProperties.class)
+@EnableMyConfigurationProperties(ServerProperties.class)
 public class TomcatWebServerConfig {
     @Bean("tomcatWebServerFactory")
     @ConditionalOnMissingBean // 같은 타입의 빈이 있는지(사용자가 직접 등록한) 체크해보고 없다면, 이걸 빈으로 등록
