@@ -7,4 +7,5 @@
 - **toby-spring-boot**  
   인프런 토비의 스프링 부트 실습
 
-![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=hy2jv&show_icons=true)
+
+![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=hy2jv&count_private=true&show_icons=true&theme=github_dark_dimmed&hide_border=true)
